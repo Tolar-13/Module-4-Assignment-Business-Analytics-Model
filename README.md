@@ -1,95 +1,79 @@
-# T-Mobile Retention Analytics: Churn Prediction Model
+# T-Mobile Retention Model
 
-This project supports T-Mobile’s customer retention strategy by developing a machine learning model that predicts customer churn. The model enables early identification of at-risk customers, helping the business take proactive steps to improve retention and reduce revenue loss.
-
----
-
-## Project Purpose
-
-The goal is to build and evaluate a predictive model using historical customer data. This solution provides the analytical foundation for deploying churn alerts and retention workflows in production environments.
+This project presents a churn prediction model built for T-Mobile using a cleaned and pre-processed customer dataset. The goal is to accurately identify customers likely to churn, allowing T-Mobile to proactively implement retention strategies. The project follows a structured machine learning workflow, including data preparation, model development, explainability, and saving of artifacts for deployment.
 
 ---
 
-## Contents
+## Project Structure
 
-| Filename                  | Description                                                                 |
-|---------------------------|-----------------------------------------------------------------------------|
-| `data_cleaning.ipynb`     | Cleans the original Telco dataset and prepares a model-ready CSV.           |
-| `telco_model_ready.csv`   | Final cleaned dataset used for training.                                    |
-| `Churn_model.ipynb`       | Main notebook for model training, testing, threshold tuning, SHAP analysis. |
-| `model.pkl`               | Final trained Logistic Regression model, saved with `joblib`.              |
-| `model_threshold.txt`     | Contains optimal decision threshold (0.39) for binary classification.       |
-| `README.md`               | This documentation file.                                                    |
-
----
-
-## Implementation Plan
-
-1. **Data Cleaning**  
-   - Handled in `data_cleaning.ipynb`: removed nulls, encoded variables, exported `telco_model_ready.csv`.
-
-2. **Model Development**  
-   - Logistic Regression with `class_weight='balanced'`  
-   - Model trained on 80% of data, tested on 20%  
-   - Threshold tuned to `0.39` for better recall  
-   - Model saved with `joblib`
-
-3. **Evaluation Summary**
-
-   **Test Set (Threshold = 0.39):**
-   - Accuracy: **0.69**
-   - Precision: **0.46**
-   - Recall: **0.89**
-   - F1-Score: **0.60**
-   - ROC AUC: **0.8377**
-
-4. **Explainability**
-   - SHAP analysis identifies key features influencing churn probability.
-   - Visuals included in `Churn_model.ipynb`.
-
-5. **Model Persistence**
-   - Model saved to `model.pkl`
-   - Classification threshold saved to `model_threshold.txt` for consistent deployment
+```text
+.
+├── data_cleaning.ipynb       # Notebook used in Module 3 to clean and prepare the dataset
+├── Churn_model.ipynb         # Main model development, training, evaluation and SHAP explainability
+├── final_model.pkl           # Trained logistic regression model saved for deployment
+├── scaler_final.pkl          # Fitted StandardScaler for preprocessing numerical inputs during inference
+├── shap_explainer.pkl        # Saved SHAP Explainer object for interpreting model predictions
+├── threshold.txt             # Stored threshold value (0.39) used for decision boundary adjustment
+├── README.md                 # This file
+```
 
 ---
 
-## How to Run (Manual)
+## How to Run the Project (Manual Steps)
 
-1. Open Jupyter Notebook or VS Code
-2. Upload the following files:
-   - `data_cleaning.ipynb`
-   - `Churn_model.ipynb`
-   - `telco_model_ready.csv`
-3. Run `Churn_model.ipynb` step-by-step to:
-   - Load the data
-   - Train & test the model
-   - Evaluate and explain performance
-   - Save the model and threshold
+1. Clone or download this repository manually.
+2. Launch Jupyter Notebook and open `Churn_model.ipynb`.
+3. Run all cells sequentially to:
+   - Load the model-ready dataset
+   - Train and evaluate the logistic regression model
+   - Visualize performance metrics
+   - Generate and visualise SHAP values
+   - Save final model and artifacts
+
+---
+
+## Model Evaluation
+
+The final model was trained using logistic regression with a threshold of 0.39.
+
+**Test Set Evaluation (Threshold = 0.39):**
+
+```text
+Accuracy: 0.69
+Precision: 0.46
+Recall: 0.89
+ROC AUC: 0.8377
+```
+
+This balance prioritises identifying churners while controlling false positives, aligning with T-Mobile’s business objective of proactive customer retention.
+
+---
+
+## Explainability
+
+SHAP (SHapley Additive exPlanations) was used to interpret both global and local feature importance, helping stakeholders understand key drivers behind churn predictions. The saved `shap_explainer.pkl` can be loaded during deployment for real-time explanation.
 
 ---
 
 ## Requirements
 
-Below are the required Python packages (tested on Python 3.11):
-
-```text
-pandas==2.2.2
-numpy==1.26.4
-scikit-learn==1.4.2
-matplotlib==3.8.4
-seaborn==0.13.2
-shap==0.45.0
-joblib==1.4.0
+```bash
+scikit-learn==1.3.0
+pandas==1.5.3
+numpy==1.23.5
+matplotlib==3.7.1
+seaborn==0.12.2
+shap==0.44.0
+joblib==1.3.2
 ```
-
-Install all dependencies using:
+Install them using:
 
 ```bash
-pip install pandas numpy scikit-learn matplotlib seaborn shap joblib
+pip install -r requirements.txt
 ```
 
----
+Or manually:
 
-## Deployment Note
-
-The saved `model.pkl` and `model_threshold.txt` are ready for deployment in a Python-based API (Flask, FastAPI) or Streamlit app. SHAP visualizations can also be integrated into dashboards for interpretability.
+```bash
+pip install scikit-learn pandas numpy matplotlib seaborn shap joblib
+```
